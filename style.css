@@ -13,7 +13,9 @@ body {
 }
 
 header {
-    text-align: center;
+    position: absolute;
+    top: 20px;
+    left: 20px;
     padding: 20px;
 }
 
@@ -24,8 +26,32 @@ button {
     font-size: 16px;
     border: none;
     cursor: pointer;
+    
 }
 
 button:hover {
     background-color: #45a049;
+}
+
+p {
+    text-align: center; 
+    color:#45a049
+
+}
+h1 {
+    text-align: center;
+    color:#45a049
+
+}
+#about {
+    margin-top: 100px; /* Adjust the distance from the top */
+
+
+
+}
+
+input, select {
+    margin-bottom: 15px;
+    padding: 8px;
+    font-size: 16px;
 }
