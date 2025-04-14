@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Ensure the body takes the full height of the screen */
+    background-color: #000;
+    color: #fff;
+    background-image: url('images/VoidWarsLogo.png'); /* Ensure the path is correct */
+    background-size: contain; /* Ensures the image scales to fit */
+    background-position: center center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents repeating the image */
+    background-attachment: fixed; /* Keeps the background in place when scrolling */
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 32px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
