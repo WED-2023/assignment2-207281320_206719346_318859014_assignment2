@@ -1,103 +1,94 @@
-document.addEventListener('keydown', function(event) {
-    if(event.key === 'ArrowLeft') {
-        // Move player spaceship left
-    }
-    if(event.key === 'ArrowRight') {
-        // Move player spaceship right
-    }
-});
+let canvas = document.getElementById("gameCanvas");
+let ctx = canvas.getContext("2d");
 
-function shoot() {
-    // Implement shooting function for the player
+let spaceship = {
+    x: canvas.width / 2 - 25,
+    y: canvas.height - 60,
+    width: 50,
+    height: 50,
+    speed: 5,
+    dx: 0,
+    dy: 0
+};
+
+let bullets = [];
+let enemies = [];
+let score = 0;
+let lives = 3;
+let gameTimer = 60; // Game time in seconds
+
+// Draw spaceship
+function drawSpaceship() {
+    ctx.fillStyle = "#4CAF50";
+    ctx.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
 }
 
-function validateForm() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-    let confirmPassword = document.getElementById("confirm-password").value;
-    let firstName = document.getElementById("first-name").value;
-    let lastName = document.getElementById("last-name").value;
-    let email = document.getElementById("email").value;
-
-    // Validate password (at least 8 characters with letters and numbers)
-    let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (!passwordRegex.test(password)) {
-        alert("Password must be at least 8 characters long and contain both letters and numbers.");
-        return false;
-    }
-
-    // Check if password and confirm password match
-    if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return false;
-    }
-
-    // Check if first name and last name contain only letters (no numbers)
-    let nameRegex = /^[A-Za-z]+$/;
-    if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-        alert("First name and last name must not contain numbers.");
-        return false;
-    }
-
-    // Validate email
-    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        alert("Please enter a valid email address.");
-        return false;
-    }
-
-    // All checks passed, form can be submitted
-    alert("Registration successful!");
-    return true; // Submit the form
+// Move spaceship
+function moveSpaceship() {
+    spaceship.x += spaceship.dx;
+    spaceship.y += spaceship.dy;
+    
+    // Prevent the spaceship from moving outside the canvas
+    if (spaceship.x < 0) spaceship.x = 0;
+    if (spaceship.x + spaceship.width > canvas.width) spaceship.x = canvas.width - spaceship.width;
+    if (spaceship.y < 0) spaceship.y = 0;
+    if (spaceship.y + spaceship.height > canvas.height) spaceship.y = canvas.height - spaceship.height;
 }
 
-// Populate Year Options (from 1900 to the current year)
-const yearSelect = document.getElementById("year");
-const currentYear = new Date().getFullYear();
-for (let year = 1900; year <= currentYear; year++) {
-    const option = document.createElement("option");
-    option.value = year;
-    option.textContent = year;
-    yearSelect.appendChild(option);
+// Draw bullets
+function drawBullets() {
+    ctx.fillStyle = "#FF0000";
+    for (let i = 0; i < bullets.length; i++) {
+        ctx.fillRect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+    }
 }
 
-// Populate Month Options
-const monthSelect = document.getElementById("month");
-for (let month = 1; month <= 12; month++) {
-    const option = document.createElement("option");
-    option.value = month;
-    option.textContent = month;
-    monthSelect.appendChild(option);
-}
-
-// Populate Day Options (based on the selected month and year)
-const daySelect = document.getElementById("day");
-
-function updateDays() {
-    // Get selected year and month
-    const selectedYear = parseInt(yearSelect.value);
-    const selectedMonth = parseInt(monthSelect.value);
-
-    // If year and month are selected, update the days
-    if (!isNaN(selectedYear) && !isNaN(selectedMonth)) {
-        // Get the number of days in the selected month and year
-        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-        daySelect.innerHTML = '<option value="" disabled selected>Day</option>'; // Reset day options
-
-        // Add day options based on the number of days in the month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const option = document.createElement("option");
-            option.value = day;
-            option.textContent = day;
-            daySelect.appendChild(option);
+// Move bullets
+function moveBullets() {
+    for (let i = 0; i < bullets.length; i++) {
+        bullets[i].y -= bullets[i].speed;
+        if (bullets[i].y < 0) {
+            bullets.splice(i, 1);
+            i--;
         }
     }
 }
 
-// Event listeners to update day options when year or month changes
-yearSelect.addEventListener("change", updateDays);
-monthSelect.addEventListener("change", updateDays);
+// Key event listeners for spaceship movement
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === "d") spaceship.dx = spaceship.speed;
+    if (e.key === "ArrowLeft" || e.key === "a") spaceship.dx = -spaceship.speed;
+    if (e.key === "ArrowUp" || e.key === "w") spaceship.dy = -spaceship.speed;
+    if (e.key === "ArrowDown" || e.key === "s") spaceship.dy = spaceship.speed;
+    if (e.key === " " || e.key === "Enter") fireBullet();
+});
 
-// Initially populate the days based on the default selections
-updateDays();
+document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "d" || e.key === "a") spaceship.dx = 0;
+    if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "w" || e.key === "s") spaceship.dy = 0;
+});
 
+// Fire bullets
+function fireBullet() {
+    let bullet = {
+        x: spaceship.x + spaceship.width / 2 - 5,
+        y: spaceship.y,
+        width: 10,
+        height: 20,
+        speed: 4
+    };
+    bullets.push(bullet);
+}
+
+// Game loop
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawSpaceship();
+    moveSpaceship();
+    drawBullets();
+    moveBullets();
+    requestAnimationFrame(gameLoop);
+}
+
+// Start the game loop
+gameLoop();

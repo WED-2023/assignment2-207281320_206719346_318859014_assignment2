@@ -1,17 +1,38 @@
 body {
+    
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     height: 100vh; /* Ensure the body takes the full height of the screen */
     background-color: #000;
     color: #fff;
+    justify-content: center;
+    align-items: center;
     background-image: url('images/VoidWarsLogo.png'); /* Ensure the path is correct */
     background-size: contain; /* Ensures the image scales to fit */
     background-position: center center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents repeating the image */
     background-attachment: fixed; /* Keeps the background in place when scrolling */
+    
 }
-
+#welcome {
+    position: absolute;
+    bottom: 30px; /* Place the buttons 30px from the bottom */
+    left: 50%; /* Horizontally center */
+    transform: translateX(-50%); /* Adjust for true centering */
+    text-align: center;
+}
+.container {
+    background-color: #063620;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 450px; /* Adjust the width as needed */
+    text-align: left; /* Align all the form text to the left */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align all children (form inputs) */
+}
 header {
     position: absolute;
     top: 20px;
@@ -19,14 +40,17 @@ header {
     padding: 20px;
 }
 
+
 button {
+    padding: 14px;
     background-color: #4CAF50;
     color: white;
-    padding: 15px 32px;
-    font-size: 16px;
+    font-size: 18px;
     border: none;
     cursor: pointer;
-    
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -46,12 +70,45 @@ h1 {
 #about {
     margin-top: 100px; /* Adjust the distance from the top */
 
-
-
 }
 
+ 
 input, select {
-    margin-bottom: 15px;
-    padding: 8px;
+    margin-bottom: 20px; /* Larger space between inputs */
+    padding: 12px; /* Larger padding for more comfortable input */
     font-size: 16px;
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light border */
+    transition: all 0.3s ease-in-out; 
+    width: 100%; 
+}
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#error-message {
+    color: red;
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+dialog {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    padding: 20px;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the modal */
+    text-align: center;
+    z-index: 9999; /* Make sure it's above other content */
+    display: none; /* Hide the modal initially */
 }

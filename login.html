@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Void Wars</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><img src="images/ufo.png" alt="Void Wars Logo" class="logo"></a>
+    </header>
+
+    <div class="container">
+        <h1>Login to Play Void Wars</h1>
+        <form id="login-form" onsubmit="return validateLogin()">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" name="username" required>
+
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <p id="error-message" style="color: red; display: none;">Invalid username or password.</p>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
