@@ -6,6 +6,7 @@ const predefinedUsers = [
 let users = JSON.parse(localStorage.getItem("users")) || predefinedUsers;
 
 function validateForm() {
+    event.preventDefault();
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirm-password").value;
@@ -17,7 +18,7 @@ function validateForm() {
     // Validate password (at least 8 characters with letters and numbers)
     let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     if (!passwordRegex.test(password)) {
-        alert("Password must be at least 8 characters long and contain both letters and numbers.");
+        alert("Password must be at least 8 characters long and contain both letters and numbers only.");
         return false;
     }
 
@@ -52,12 +53,18 @@ function validateForm() {
     // Save the updated users array to localStorage
     localStorage.setItem("users", JSON.stringify(users));
 
-    // All checks passed, form can be submitted
     alert("Registration successful!");
+
+    // Redirect to login page
+    // setTimeout(function() {
+    //     console.log("Redirecting to login.html...");
+    //     window.location.href = "login.html";  // Redirect to login page
+    // }, 500);
+    window.location.href = "login.html";
     return true; // Submit the form
 }
 
-// Populate Year Options (from 1900 to the current year)
+// Populate Year Options (from 1940 to the current year)
 const yearSelect = document.getElementById("year");
 const currentYear = new Date().getFullYear();
 for (let year = 1940; year <= currentYear; year++) {

@@ -1,4 +1,6 @@
 function validateLogin() {
+    event.preventDefault();
+
     let username = document.getElementById("login-username").value;
     let password = document.getElementById("login-password").value;
 
@@ -11,8 +13,7 @@ function validateLogin() {
     if (userExists) {
         // Successful login
         alert("Login successful!");
-        // You can redirect the user to another page, like the main game page
-        window.location.href = "game.html"; // Or any other page
+        window.location.href = "config.html"; 
         return true;
     } else {
         // Invalid credentials
