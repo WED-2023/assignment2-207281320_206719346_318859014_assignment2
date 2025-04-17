@@ -1,0 +1,90 @@
+:root {
+  --color-one: #ffdede;
+  --color-two: #ff0b55;
+  --color-three: #cf0f47;
+  --color-four: #000;
+}
+
+body {
+  margin: 0;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100svh;
+  animation: backgroundScroll 180s linear infinite;
+  background-image: url(images/background.webp);
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  background-color: var(--color-four);
+  color: var(--color-one);
+}
+
+@keyframes backgroundScroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Header */
+header {
+  background-color: var(--color-four);
+  height: 50px;
+  gap: 10%;
+}
+
+#logo {
+  font-size: 34px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+}
+
+main {
+  height: calc(100svh - 130px);
+}
+
+footer {
+  animation: backgroundScroll 60s linear infinite;
+  background-image: url(images/footer.webp);
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  height: 80px;
+}
+
+#menu {
+  display: flex;
+  gap: 20px;
+}
+
+#menu a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Hover animations */
+.color-hover {
+  color: var(--color-one);
+  transition: color ease-in-out 0.5s;
+}
+
+.color-hover:hover {
+  color: var(--color-two);
+}
+
+/* Layouts */
+.flex-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+/* Modal */
