@@ -64,11 +64,16 @@ footer {
 /* Animations */
 .color-hover {
   color: var(--color-one);
-  transition: color ease-in-out 0.5s;
+  text-shadow: 0px 0px var(--color-one);
+  scale: 1;
+  transition: color ease-in-out 0.5s, text-shadow ease-in-out 0.3s,
+    scale ease-in-out 0.5s;
 }
 
 .color-hover:hover {
   color: var(--color-two);
+  text-shadow: 0px 10px var(--color-four);
+  scale: 1.2;
 }
 
 .floatingDiv {
