@@ -7,22 +7,32 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header>
-      <a href="index.html"
-        ><img src="images/green_ufo.png" alt="Void Wars Logo" class="logo"
-      /></a>
-    </header>
-
-    <div>
+    <div class="flex-centered flex-column">
+      <img
+        src="images/logoT.webp"
+        class="floatingDiv"
+        style="margin-bottom: 20px"
+      />
       <h1>Login to Play Void Wars</h1>
       <form id="login-form" onsubmit="return validateLogin()">
-        <label for="login-username">Username:</label>
-        <input type="text" id="login-username" name="username" required />
+        <div class="flex-centered flex-column form">
+          <div class="form-row">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" name="username" required />
+          </div>
 
-        <label for="login-password">Password:</label>
-        <input type="password" id="login-password" name="password" required />
+          <div class="form-row">
+            <label for="login-password">Password:</label>
+            <input
+              type="password"
+              id="login-password"
+              name="password"
+              required
+            />
+          </div>
 
-        <button type="submit">Login</button>
+          <button type="submit">Login</button>
+        </div>
       </form>
       <p id="error-message" style="color: red; display: none">
         Invalid username or password.

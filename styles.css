@@ -37,14 +37,9 @@ header {
   gap: 10%;
 }
 
-#logo {
-  font-size: 34px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-}
-
+/* Main */
 main {
-  height: calc(100svh - 130px);
+  min-height: calc(100svh - 130px);
 }
 
 footer {
@@ -66,7 +61,7 @@ footer {
   font-weight: 600;
 }
 
-/* Hover animations */
+/* Animations */
 .color-hover {
   color: var(--color-one);
   transition: color ease-in-out 0.5s;
@@ -75,6 +70,30 @@ footer {
 .color-hover:hover {
   color: var(--color-two);
 }
+
+.floatingDiv {
+  animation: floatingDiv 5s linear infinite;
+}
+
+@keyframes floatingDiv {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(5px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Typography */
 
 /* Layouts */
 .flex-centered {
@@ -85,6 +104,43 @@ footer {
 
 .flex-column {
   flex-direction: column;
+}
+
+.form {
+  gap: 15px;
+  margin-bottom: 10px;
+  width: 80svw;
+}
+
+.form-row {
+  min-width: 400px;
+  max-width: 100svw;
+  justify-content: space-between;
+  display: flex;
+  gap: 20px;
+  color: var(--color-one);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* Decorations */
+button {
+  background-color: var(--color-two);
+  border: none;
+  color: var(--color-one);
+  padding: 15px 40px;
+  margin: 0 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background-color ease-in-out 0.5s, box-shadow ease-in-out 0.3s;
+  box-shadow: 5px 5px var(--color-one);
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--color-three);
+  box-shadow: 0px 0px var(--color-one);
 }
 
 /* Modal */
