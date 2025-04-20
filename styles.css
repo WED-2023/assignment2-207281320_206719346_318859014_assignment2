@@ -37,20 +37,6 @@ header {
   gap: 10%;
 }
 
-/* Main */
-main {
-  min-height: calc(100svh - 130px);
-}
-
-footer {
-  animation: backgroundScroll 60s linear infinite;
-  background-image: url(images/footer.webp);
-  background-size: cover;
-  background-repeat: repeat;
-  background-position: center;
-  height: 80px;
-}
-
 #menu {
   display: flex;
   gap: 20px;
@@ -59,6 +45,21 @@ footer {
 #menu a {
   text-decoration: none;
   font-weight: 600;
+}
+
+/* Main */
+main {
+  min-height: calc(100svh - 130px);
+}
+
+/* Footer */
+footer {
+  animation: backgroundScroll 60s linear infinite;
+  background-image: url(images/footer.webp);
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  height: 80px;
 }
 
 /* Animations */
