@@ -1,53 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Configuration - Void Wars</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <header>
-        <a href="index.html"><img src="images/green_ufo.png" alt="Void Wars Logo" class="logo"></a>
-        
+      <a href="index.html"
+        ><img src="images/green_ufo.png" alt="Void Wars Logo" class="logo"
+      /></a>
     </header>
 
     <div class="container">
-        <h2>Game Configuration</h2>
+      <h2>Game Configuration</h2>
 
-        <!-- Key For Shooting -->
-        <div class="config-option">
-            <label for="shoot-key">Select key to shoot (Press any letter or space):</label>
-            <input type="text" id="shoot-key" name="shoot-key" readonly placeholder="Press any letter or space" />
-        </div>
+      <!-- Key For Shooting -->
+      <div class="config-option">
+        <label for="shoot-key"
+          >Select key to shoot (Press any letter or space):</label
+        >
+        <input
+          type="text"
+          id="shoot-key"
+          name="shoot-key"
+          readonly
+          placeholder="Press any letter or space"
+        />
+      </div>
 
-        <!-- Game Time Configuration -->
-        <div class="config-option">
-            <label for="game-time">Select game time (MM:SS):</label>
-            <input type="text" id="game-time" name="game-time" placeholder="02:00" maxlength="5">
-        </div>
+      <!-- Game Time Configuration -->
+      <div class="config-option">
+        <label for="game-time">Select game time (MM:SS):</label>
+        <input
+          type="text"
+          id="game-time"
+          name="game-time"
+          placeholder="02:00"
+          maxlength="5"
+        />
+      </div>
 
-        <!-- Spaceship Color Configuration -->
-        <div class="config-option">
-            <label for="spaceship-color">Choose spaceship color:</label>
-            <select id="spaceship-color" name="spaceship-color">
-                <option value="green">Green</option>
-                <option value="black">Black</option>
-                <option value="grey">Grey</option>
-                <option value="purple">Purple</option>
-            </select>
-        </div>
-        
-        <div id="spaceship-image">
-            <img src="images/green_ufo.png" alt="Green UFO" id="ufo-img">
-        </div>
+      <!-- Spaceship Color Configuration -->
+      <div class="config-option">
+        <label for="spaceship-color">Choose spaceship color:</label>
+        <select id="spaceship-color" name="spaceship-color">
+          <option value="green">Green</option>
+          <option value="black">Black</option>
+          <option value="grey">Grey</option>
+          <option value="purple">Purple</option>
+        </select>
+      </div>
 
-        <!-- Start Game Button -->
-        <button id="start-game-btn">Start Game</button>
+      <div id="spaceship-image">
+        <img src="images/green_ufo.png" alt="Green UFO" id="ufo-img" />
+      </div>
 
-        <p id="error-message" style="color: red; display: none;">Please fill out all options!</p>
+      <!-- Start Game Button -->
+      <button id="start-game-btn">Start Game</button>
+
+      <p id="error-message" style="color: red; display: none">
+        Please fill out all options!
+      </p>
     </div>
 
-    <script src="config.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
