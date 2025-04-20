@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,10 +14,9 @@
 
 
 
-    <!-- Game Area -->
     <div class="game-container">
         <canvas id="gameCanvas" width="800" height="600"></canvas> <!-- Game Canvas -->
-        <div id="scoreboard">
+        <!-- <div id="scoreboard">
             <p>Score: <span id="score">0</span></p>
             <p>Lives: <span id="lives">3</span></p>
             <p>Time Left: <span id="timer">02:00</span></p>
@@ -25,10 +24,36 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Void Wars. All rights reserved.</p>
+        <p>&copy; 2023 Void Wars. All rights reserved.</p>
         <p>Developed by Daniel Lyubansky & Netanel Mordakhay</p>
     </footer>
 
     <script src="game.js"></script>
 </body>
+</html> --> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spaceship Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #gameCanvas {
+      background-color: rgb(33, 10, 96);
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+  </style> 
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <script src="game.js"></script>
+</body>
 </html>
+
