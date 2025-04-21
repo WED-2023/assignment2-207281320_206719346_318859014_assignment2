@@ -45,3 +45,17 @@ function attachPageEvents() {
     loginBtn.addEventListener("click", () => loadPage("login.html"));
   }
 }
+
+/* Sound effects */
+// Button's hover sound effect
+document.addEventListener("DOMContentLoaded", () => {
+  const hoverSound = new Audio("sounds/button_hover.mp3");
+  // Mouse hover event
+  document.addEventListener("mouseover", (event) => {
+    const currentTag = event.target.tagName;
+    // For Buttons & A
+    if (currentTag === "BUTTON" || currentTag === "A") {
+      hoverSound.play();
+    }
+  });
+});

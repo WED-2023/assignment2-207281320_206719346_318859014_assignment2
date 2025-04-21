@@ -28,7 +28,6 @@ export function validateUser(username, password) {
 /* Login form event listener */
 export function setup() {
   const form = document.getElementById("login-form");
-  const error = document.getElementById("error-message");
 
   if (!form) return;
 
