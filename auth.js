@@ -45,7 +45,9 @@ export function setup() {
     }
 
     alert(`Welcome back, ${username}!`);
-    loadPage("welcome.html");
+    localStorage.setItem("loggedUser", username);
+    location.reload(); // Reload to load the script again, allows for the index.html's logout button to appear
+    loadPage("config.html"); // Than load main's div with config
     window.dispatchEvent(new CustomEvent("userLoggedIn", { detail: username }));
   });
 }

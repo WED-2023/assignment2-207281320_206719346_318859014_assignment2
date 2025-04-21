@@ -8,6 +8,8 @@ export function loadPage(url) {
       document.querySelector("main").innerHTML = html;
       attachPageEvents();
 
+      /* IF IT'S STUPID BUT IT WORKS - IT'S NOT STUPID!
+      I have so much more appriciation now for JS frameworks. */
       const scriptPath = PAGE_SCRIPT[url];
       if (scriptPath) {
         import(scriptPath).then((mod) => {
