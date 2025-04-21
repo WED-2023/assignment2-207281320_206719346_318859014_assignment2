@@ -1,4 +1,4 @@
-import { USERS } from "./constants.js";
+import { USERS, YEARS, MONTHS, getDaysInMonth } from "./constants.js";
 import { loadPage } from "./script.js";
 
 /* getters & setters */
@@ -25,81 +25,128 @@ export function validateUser(username, password) {
   }
 }
 
-/* Login form event listener */
+export function populateDateSelectors() {
+  const yearSelect = document.getElementById("year");
+  const monthSelect = document.getElementById("month");
+  const daySelect = document.getElementById("day");
+
+  if (!yearSelect || !monthSelect || !daySelect) return;
+
+  // Fill year
+  YEARS.forEach((y) => yearSelect.append(new Option(y, y)));
+
+  // Fill month
+  MONTHS.forEach((m) => monthSelect.append(new Option(m, m)));
+
+  // Fill days based on year & month
+  const updateDays = () => {
+    const y = parseInt(yearSelect.value);
+    const m = parseInt(monthSelect.value);
+    if (!y || !m) return;
+
+    const days = getDaysInMonth(y, m);
+    daySelect.innerHTML = `<option disabled selected>Day</option>`;
+    for (let i = 1; i <= days; i++) {
+      daySelect.append(new Option(i, i));
+    }
+  };
+
+  yearSelect.addEventListener("change", updateDays);
+  monthSelect.addEventListener("change", updateDays);
+}
+
+/* Login & registration form event listener (setup) */
 export function setup() {
+  // get forms
   const loginForm = document.getElementById("login-form");
   const registerationForm = document.getElementById("registration-form");
 
+  // Return none if no forms currently
   if (!loginForm && !registerationForm) return;
 
+  populateDateSelectors();
+
+  // Login form
   if (loginForm) {
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
+      // Get the values from the form and validate them
       const username = loginForm.username.value.trim();
       const password = loginForm.password.value;
       const validUser = validateUser(username, password);
 
+      // No user
       if (!validUser) {
         alert("No such user.");
         return false;
       }
 
+      // Succesfull login
       alert(`Welcome back, ${username}!`);
       localStorage.setItem("loggedUser", username);
       location.reload(); // Reload to load the script again, allows for the index.html's logout button to appear
       loadPage("config.html"); // Than load main's div with config
-      window.dispatchEvent(
-        new CustomEvent("userLoggedIn", { detail: username })
-      );
     });
   }
 
-  if (registerForm) {
-    registerForm.addEventListener("submit", (event) => {
+  // Registration form
+  if (registerationForm) {
+    registerationForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
-      const username = registerForm.username.value.trim();
-      const password = registerForm.password.value;
-      const confirmPassword = registerForm["confirm-password"].value;
-      const firstName = registerForm["first-name"].value.trim();
-      const lastName = registerForm["last-name"].value.trim();
-      const email = registerForm.email.value.trim();
-
+      // Get values from the form
+      const username = registerationForm.username.value.trim();
+      const password = registerationForm.password.value;
+      const confirmPassword = registerationForm["confirm-password"].value;
+      const firstName = registerationForm["first-name"].value.trim();
+      const lastName = registerationForm["last-name"].value.trim();
+      const email = registerationForm.email.value.trim();
+      // Get current users in local storage + mock users
       const users = getUsers();
 
-      // Validations
+      // Validate password
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        alert(
+          "Password must be at least 8 characters long and contain both letters and numbers only."
+        );
+        return false;
+      }
+
+      // Validate matching passwords
       if (password !== confirmPassword) {
         alert("Passwords do not match.");
-        return;
+        return false;
       }
 
+      // Validate user
       if (users.find((u) => u.username === username)) {
         alert("Username already exists.");
-        return;
+        return false;
       }
 
+      // Validate username
       const nameRegex = /^[A-Za-z]+$/;
       if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
         alert("Name must only contain letters.");
-        return;
+        return false;
       }
 
+      // Validate email
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         alert("Please enter a valid email address.");
-        return;
+        return false;
       }
 
-      const newUser = { username, password };
-      users.push(newUser);
-      saveUsers(users);
-      localStorage.setItem("loggedUser", username);
+      // Succesfull registration
+      const newUser = { username, password }; // new created user
+      users.push(newUser); // add to current users
+      saveUsers(users); // update all current users
       alert("Registration successful!");
-      loadPage("login.html");
-      window.dispatchEvent(
-        new CustomEvent("userLoggedIn", { detail: username })
-      );
+      //location.reload(); // Reload to load the script again, allows for the index.html's logout button to appear
+      loadPage("login.html"); // load login page
     });
   }
 }
