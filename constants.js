@@ -4,6 +4,13 @@ export const USERS = [
   { username: "123", password: "123" },
 ];
 
+// Dates for registration
+export const YEARS = Array.from({ length: 100 }, (_, i) => 2024 - i);
+export const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+export function getDaysInMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+
 // Deafault config
 export const CONFIG = {
   shootKey: "space",
