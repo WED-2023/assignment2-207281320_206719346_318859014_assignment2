@@ -21,6 +21,31 @@
 
     <footer class="flex-centered">footer</footer>
 
+    <!-- Global script file -->
     <script type="module" src="script.js"></script>
+
+    <!-- Logout script only for logged user -->
+    <script>
+      // Get menu & current user
+      const menu = document.getElementById("menu");
+      const user = localStorage.getItem("loggedUser");
+
+      // Create button and logic for user
+      if (user) {
+        const logoutButton = document.createElement("a");
+        logoutButton.href = "#";
+        logoutButton.textContent = "LOGOUT";
+        logoutButton.className = "color-hover";
+
+        logoutButton.addEventListener("click", () => {
+          localStorage.removeItem("loggedUser");
+          alert(`We hope to see you again soon, ${user}`);
+          location.reload();
+        });
+
+        // Append to menu
+        menu.appendChild(logoutButton);
+      }
+    </script>
   </body>
 </html>
