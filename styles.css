@@ -8,6 +8,7 @@
 body {
   margin: 0;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -165,16 +166,15 @@ button:hover {
   background-color: var(--color-four);
   margin: 20svh auto;
   padding: 20px;
-  //border-radius: 20px;
-  border: 5px solid var(--color-two);
-  width: 70svw; /* For some reason without this closing the modal from outside click won't work (?) */
+  border: 10px solid var(--color-two);
+  width: 60svw; /* For some reason without this closing the modal from outside click won't work (?) */
   box-shadow: 10px 10px var(--color-one);
 }
 
 .close {
   color: var(--color-two);
-  float: left;
-  margin-right: 20px;
+  float: right;
+  margin-left: 20px;
   font-size: 48px;
   font-weight: bold;
 }
