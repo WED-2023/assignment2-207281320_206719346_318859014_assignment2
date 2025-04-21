@@ -8,11 +8,57 @@ canvas.height = window.innerHeight;
 const gameWidth = canvas.width;
 const gameHeight = canvas.height;
 
+
+const newGameBtn = document.createElement("button");
+newGameBtn.textContent = "New Game";
+newGameBtn.style.position = "absolute";
+newGameBtn.style.top = "10px";
+newGameBtn.style.right = "20px";
+newGameBtn.style.zIndex = "1000";
+newGameBtn.style.fontSize = "16px";
+newGameBtn.style.padding = "8px 12px";
+document.body.appendChild(newGameBtn);
+newGameBtn.onclick = () => {
+    // Don't save score — reload
+    location.reload();
+  };
+  
+
 // --- Config ---
 const config = {
   shootKey: " ", // default: spacebar
   gameTimeSeconds: 120    // 2 minutes default
 };
+
+// --- Scoreboard ---
+const currentPlayer = localStorage.getItem("loggedUser");
+const scoreKey = `scoreHistory_${currentPlayer}`;
+
+function saveScoreToHistory() {
+  if (!currentPlayer) return;
+  const history = JSON.parse(localStorage.getItem(scoreKey)) || [];
+  history.push({
+    player: currentPlayer,
+    score,
+    date: new Date().toLocaleString()
+  });
+  history.sort((a, b) => b.score - a.score);
+  localStorage.setItem(scoreKey, JSON.stringify(history));
+  return history;
+}
+
+function drawScoreboard(history) {
+  if (!history || history.length === 0) return;
+  const rank = history.findIndex(h => h.score === score) + 1;
+  ctx.font = "24px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`Your Rank: #${rank} of ${history.length}`, canvas.width / 2, canvas.height / 2 + 60);
+  ctx.font = "18px Arial";
+  ctx.fillText("Top 5 Scores:", canvas.width / 2, canvas.height / 2 + 90);
+  history.slice(0, 5).forEach((entry, i) => {
+    ctx.fillText(`${i + 1}. ${entry.player} – ${entry.score} pts – ${entry.date}`, canvas.width / 2, canvas.height / 2 + 120 + i * 25);
+  });
+}
 
 // --- Images ---
 const shipImg = new Image();
@@ -383,7 +429,8 @@ function drawEndScreen() {
         ? `You can do better: ${score}`
         : "Winner!";
     }
-  
+    const history = saveScoreToHistory();
+    drawScoreboard(history);
     ctx.fillText(message, canvas.width / 2, canvas.height / 2 - 20);
   
     const button = document.createElement("button");
@@ -398,6 +445,34 @@ function drawEndScreen() {
     button.onclick = () => {
       location.reload();
     };
+    const clearBtn = document.createElement("button");
+    clearBtn.textContent = "Clear Scoreboard";
+    clearBtn.style.position = "absolute";
+    clearBtn.style.left = `${canvas.width / 2 - 80}px`;
+    clearBtn.style.top = `${canvas.height / 2 + 70}px`;
+    clearBtn.style.fontSize = "16px";
+    clearBtn.style.padding = "8px 16px";
+    document.body.appendChild(clearBtn);
+
+    clearBtn.onclick = () => {
+        localStorage.removeItem(scoreKey);
+        alert("Your scoreboard has been cleared.");
+      
+        // Clear the area where the scoreboard is shown
+        ctx.fillStyle = "rgba(0,0,0,0.7)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+        // Redraw the end message
+        ctx.fillStyle = "white";
+        ctx.font = "36px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Scoreboard cleared.", canvas.width / 2, canvas.height / 2 - 20);
+      
+        // You can redraw the Play Again button text if needed
+        ctx.font = "20px Arial";
+        ctx.fillText("Press 'Play Again' to start a new game.", canvas.width / 2, canvas.height / 2 + 20);
+      };
+      
   }
   
   
