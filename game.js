@@ -10,7 +10,8 @@ const gameHeight = canvas.height;
 
 // --- Config ---
 const config = {
-  shootKey: " " // default: spacebar
+  shootKey: " ", // default: spacebar
+  gameTimeSeconds: 120    // 2 minutes default
 };
 
 // --- Images ---
@@ -41,6 +42,12 @@ let score = 0;
 let lives = 3;
 let gameOver = false;
 let gameWon = false;
+let speedBoosts = 0;
+const maxSpeedBoosts = 4;
+const speedBoostInterval = 5000; // 5 seconds
+let timeLeft = config.gameTimeSeconds;
+let timerInterval = null;
+
 
 // --- Ship ---
 const movementAreaHeight = gameHeight * 0.4;
@@ -237,7 +244,7 @@ function fireEnemyMissile() {
   enemyMissiles.push({
     x: enemyGroup.x + shooter.x + enemyWidth / 2 - 5,
     y: enemyGroup.y + shooter.y + enemyHeight,
-    speed: 2,
+    speed: 2 * Math.pow(1.2, speedBoosts),
     width: 10,
     height: 20
   });
@@ -339,24 +346,45 @@ function drawExplosions() {
 function drawShip() {
   ctx.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
 }
-function drawScore() {
+
+function drawHUD() {
+    // Score
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
     ctx.fillText(`Score: ${score}`, 20, 30);
-  }
-function drawLives() {
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
+  
+    // Lives
     ctx.fillText(`Lives: ${"❤️".repeat(lives)}`, 20, 60);
+  
+    // Timer
+    const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+    const seconds = String(timeLeft % 60).padStart(2, '0');
+    ctx.fillText(`Time Left: ${minutes}:${seconds}`, 20, 90);
   }
-  function drawEndScreen() {
+
+
+  
+function drawEndScreen() {
     ctx.fillStyle = "rgba(0,0,0,0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   
     ctx.fillStyle = "white";
-    ctx.font = "40px Arial";
+    ctx.font = "36px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(gameWon ? "You Win!" : "Game Over", canvas.width / 2, canvas.height / 2 - 20);
+  
+    let message = "";
+  
+    if (gameWon) {
+      message = "Champion!";
+    } else if (lives <= 0) {
+      message = "You Lost!";
+    } else if (timeLeft <= 0) {
+      message = score < 100
+        ? `You can do better: ${score}`
+        : "Winner!";
+    }
+  
+    ctx.fillText(message, canvas.width / 2, canvas.height / 2 - 20);
   
     const button = document.createElement("button");
     button.textContent = "Play Again";
@@ -371,6 +399,9 @@ function drawLives() {
       location.reload();
     };
   }
+  
+  
+
   
   
 
@@ -389,8 +420,9 @@ function gameLoop() {
   drawEnemyMissiles();
   drawPlayerBullets();
   drawExplosions();
-  drawScore();
-  drawLives();
+//   drawScore();
+//   drawLives();
+  drawHUD();
 
 
   if (gameOver || gameWon) {
@@ -402,5 +434,28 @@ function gameLoop() {
 }
 
 shipImg.onload = () => {
-  gameLoop();
-};
+    gameLoop();
+  
+    timerInterval = setInterval(() => {
+      if (!gameOver && !gameWon) {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          gameOver = true;
+          clearInterval(timerInterval);
+        }
+      }
+    }, 1000);
+  };
+
+setInterval(() => {
+    if (speedBoosts < maxSpeedBoosts) {
+      enemyGroup.dx *= 1.2; // Speed up enemy group movement
+  
+      enemyMissiles.forEach(missile => {
+        missile.speed *= 1.2; // Speed up current missiles
+      });
+  
+      speedBoosts++;
+    }
+  }, speedBoostInterval);
+  
