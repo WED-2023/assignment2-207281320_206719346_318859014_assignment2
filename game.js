@@ -1,6 +1,8 @@
-import { CONFIG } from "./constants.js";
+import { CONFIG as DEFAULT_CONFIG } from "./constants.js";
 
 // --- Canvas Setup ---
+const storedConfig =
+  JSON.parse(localStorage.getItem("gameConfig")) || DEFAULT_CONFIG;
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -24,8 +26,8 @@ newGameBtn.onclick = () => {
 
 // --- Config ---
 const config = {
-  shootKey: " ", // default: spacebar
-  gameTimeSeconds: 120, // 2 minutes default
+  shootKey: storedConfig.shootKey,
+  gameTimeSeconds: storedConfig.gameTime,
 };
 
 // --- Scoreboard ---

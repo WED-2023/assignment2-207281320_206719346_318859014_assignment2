@@ -27,6 +27,9 @@ document
 document
   .getElementById("nav-how")
   .addEventListener("click", () => loadPage("howtoplay.html"));
+document
+  .getElementById("nav-config")
+  ?.addEventListener("click", () => loadPage("config.html"));
 
 window.addEventListener("DOMContentLoaded", () => {
   loadPage("welcome.html");

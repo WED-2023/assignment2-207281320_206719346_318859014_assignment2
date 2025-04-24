@@ -3,68 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Configuration - Void Wars</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Configure Game - Void Wars</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header>
-      <a href="index.html"
-        ><img src="images/green_ufo.png" alt="Void Wars Logo" class="logo"
-      /></a>
-    </header>
+    <div class="flex-centered flex-column">
+      <img
+        src="images/logoT.webp"
+        class="floatingDiv"
+        style="margin-bottom: 20px"
+      />
+      <h1>Game Configuration</h1>
+      <form id="config-form" class="form flex-centered flex-column">
+        <div class="form-row">
+          <label for="shoot-key">Shoot Key:</label>
+          <input type="text" id="shoot-key" name="shootKey" readonly />
+        </div>
 
-    <div class="container">
-      <h2>Game Configuration</h2>
+        <div class="form-row">
+          <label for="game-time">Game Time (seconds):</label>
+          <input type="text" id="game-time" name="gameTime" placeholder="120" />
+        </div>
 
-      <!-- Key For Shooting -->
-      <div class="config-option">
-        <label for="shoot-key"
-          >Select key to shoot (Press any letter or space):</label
-        >
-        <input
-          type="text"
-          id="shoot-key"
-          name="shoot-key"
-          readonly
-          placeholder="Press any letter or space"
-        />
-      </div>
+        <div class="form-row">
+          <label for="spaceship-color">Spaceship Color:</label>
+          <select id="spaceship-color" name="spaceshipColor">
+            <option value="blue">Blue</option>
+            <option value="black">Black</option>
+            <option value="grey">Grey</option>
+            <option value="green">Green</option>
+          </select>
+        </div>
 
-      <!-- Game Time Configuration -->
-      <div class="config-option">
-        <label for="game-time">Select game time (MM:SS):</label>
-        <input
-          type="text"
-          id="game-time"
-          name="game-time"
-          placeholder="02:00"
-          maxlength="5"
-        />
-      </div>
-
-      <!-- Spaceship Color Configuration -->
-      <div class="config-option">
-        <label for="spaceship-color">Choose spaceship color:</label>
-        <select id="spaceship-color" name="spaceship-color">
-          <option value="green">Green</option>
-          <option value="black">Black</option>
-          <option value="grey">Grey</option>
-          <option value="purple">Purple</option>
-        </select>
-      </div>
-
-      <div id="spaceship-image">
-        <img src="images/green_ufo.png" alt="Green UFO" id="ufo-img" />
-      </div>
-
-      <!-- Start Game Button -->
-      <button id="start-game-btn">Start Game</button>
-
-      <p id="error-message" style="color: red; display: none">
-        Please fill out all options!
-      </p>
+        <button id="nav-config" type="submit">Save & Play</button>
+      </form>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="config.js"></script>
   </body>
 </html>

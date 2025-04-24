@@ -24,4 +24,5 @@ export const PAGE_SCRIPT = {
   "login.html": "./auth.js",
   "register.html": "./auth.js",
   "game.html": "./game.js",
+  "config.html": "./config.js",
 };
