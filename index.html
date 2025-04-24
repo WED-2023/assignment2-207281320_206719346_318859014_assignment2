@@ -13,7 +13,6 @@
       <div id="menu">
         <a href="#" id="nav-home" class="color-hover">HOMEPAGE</a>
         <a href="#" id="nav-about" class="color-hover">ABOUT</a>
-        <a href="#" id="nav-how" class="color-hover">HOW TO PLAY</a>
       </div>
     </header>
 
@@ -46,6 +45,12 @@
         logoutButton.textContent = "LOGOUT";
         logoutButton.className = "color-hover";
 
+        const configButton = document.createElement("a");
+        configButton.href = "#";
+        configButton.textContent = "CONFIG";
+        configButton.className = "color-hover";
+        configButton.id = "config-btn";
+
         logoutButton.addEventListener("click", () => {
           localStorage.removeItem("loggedUser");
           alert(`We hope to see you again soon, ${user}`);
@@ -54,6 +59,7 @@
 
         // Append to menu
         menu.appendChild(logoutButton);
+        menu.appendChild(configButton);
       }
 
       /* Modal */
