@@ -14,7 +14,7 @@ export function getDaysInMonth(year, month) {
 // Deafault config
 export const CONFIG = {
   shootKey: "space",
-  gameTime: "02:00",
+  gameTime: "60",
   spaceshipColor: "blue",
 };
 

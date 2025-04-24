@@ -1,3 +1,5 @@
+import { CONFIG } from "./constants.js";
+
 // --- Canvas Setup ---
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -9,7 +11,7 @@ const gameHeight = canvas.height;
 const newGameBtn = document.createElement("button");
 newGameBtn.textContent = "New Game";
 newGameBtn.style.position = "absolute";
-newGameBtn.style.top = "10px";
+newGameBtn.style.top = "60px";
 newGameBtn.style.right = "20px";
 newGameBtn.style.zIndex = "1000";
 newGameBtn.style.fontSize = "16px";
@@ -17,7 +19,7 @@ newGameBtn.style.padding = "8px 12px";
 document.body.appendChild(newGameBtn);
 newGameBtn.onclick = () => {
   // Don't save score — reload
-  location.reload();
+  resetGame();
 };
 
 // --- Config ---
@@ -456,7 +458,8 @@ function drawEndScreen() {
   document.body.appendChild(button);
 
   button.onclick = () => {
-    location.reload();
+    //location.reload();
+    resetGame();
   };
   const clearBtn = document.createElement("button");
   clearBtn.textContent = "Clear Scoreboard";
@@ -546,3 +549,47 @@ setInterval(() => {
     speedBoosts++;
   }
 }, speedBoostInterval);
+
+function resetGame() {
+  score = 0;
+  lives = 3;
+  gameOver = false;
+  gameWon = false;
+  speedBoosts = 0;
+  timeLeft = config.gameTimeSeconds;
+  clearInterval(timerInterval);
+
+  ship.x = Math.random() * (gameWidth - ship.width);
+  ship.y = gameHeight - ship.height - 20;
+  ship.dx = 0;
+  ship.dy = 0;
+
+  playerBullets = [];
+  enemyMissiles = [];
+  explosions = [];
+
+  enemies.forEach((e) => (e.alive = true));
+  enemyGroup.x = 50;
+  enemyGroup.dx = 2;
+
+  document.querySelectorAll("button").forEach((btn) => {
+    if (
+      btn.textContent === "Play Again" ||
+      btn.textContent === "Clear Scoreboard"
+    ) {
+      btn.remove();
+    }
+  });
+
+  gameLoop();
+
+  timerInterval = setInterval(() => {
+    if (!gameOver && !gameWon) {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        gameOver = true;
+        clearInterval(timerInterval);
+      }
+    }
+  }, 1000);
+}
