@@ -34,9 +34,11 @@ const config = {
 const backgroundMusic = new Audio("sounds/bg_music.mp3");
 backgroundMusic.loop = true;
 backgroundMusic.volume = 1;
-const enemyHitSound = new Audio("sounds/enemy_hit.mp3");
-enemyHitSound.loop = false;
-enemyHitSound.volume = 1;
+function playEnemyHitSound() {
+  const sound = new Audio("sounds/enemy_hit.mp3");
+  sound.volume = 1;
+  sound.play();
+}
 const playerExplodesSound = new Audio("sounds/player_explodes.mp3");
 playerExplodesSound.loop = false;
 playerExplodesSound.volume = 1;
@@ -204,8 +206,7 @@ function updatePlayerBullets() {
         bullet.y < enemyY + enemyHeight &&
         bullet.y + bullet.height > enemyY
       ) {
-        enemyHitSound.currentTime = 0;
-        enemyHitSound.play();
+        playEnemyHitSound();
         explosions.push({
           x: enemyGroup.x + enemy.x + enemyWidth / 2 - 16,
           y: enemyGroup.y + enemy.y + enemyHeight / 2 - 16,
