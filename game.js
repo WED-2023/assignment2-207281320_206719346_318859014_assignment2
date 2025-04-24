@@ -30,6 +30,20 @@ const config = {
   gameTimeSeconds: storedConfig.gameTime,
 };
 
+// --- Sounds ---
+const backgroundMusic = new Audio("sounds/bg_music.mp3");
+backgroundMusic.loop = true;
+backgroundMusic.volume = 1;
+const enemyHitSound = new Audio("sounds/enemy_hit.mp3");
+enemyHitSound.loop = false;
+enemyHitSound.volume = 1;
+const playerExplodesSound = new Audio("sounds/player_explodes.mp3");
+playerExplodesSound.loop = false;
+playerExplodesSound.volume = 1;
+const loseSound = new Audio("sounds/you_lose.mp3");
+loseSound.loop = false;
+loseSound.volume = 1;
+
 // --- Scoreboard ---
 const currentPlayer = localStorage.getItem("loggedUser");
 const scoreKey = `scoreHistory_${currentPlayer}`;
@@ -190,6 +204,8 @@ function updatePlayerBullets() {
         bullet.y < enemyY + enemyHeight &&
         bullet.y + bullet.height > enemyY
       ) {
+        enemyHitSound.currentTime = 0;
+        enemyHitSound.play();
         explosions.push({
           x: enemyGroup.x + enemy.x + enemyWidth / 2 - 16,
           y: enemyGroup.y + enemy.y + enemyHeight / 2 - 16,
@@ -335,6 +351,8 @@ function updateEnemyMissiles() {
       missile.y < ship.y + ship.height &&
       missile.y + missile.height > ship.y
     ) {
+      playerExplodesSound.currentTime = 0;
+      playerExplodesSound.play();
       explosions.push({
         x: ship.x + ship.width / 2 - 16,
         y: ship.y + ship.height / 2 - 16,
@@ -348,6 +366,12 @@ function updateEnemyMissiles() {
       //   ship.y = gameHeight - ship.height - 20;
       lives--;
       if (lives <= 0) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+        setTimeout(() => {
+          loseSound.currentTime = 0;
+          loseSound.play();
+        }, 500);
         gameOver = true;
       } else {
         ship.x = Math.random() * (gameWidth - ship.width);
@@ -528,6 +552,7 @@ function gameLoop() {
 
 shipImg.onload = () => {
   gameLoop();
+  backgroundMusic.play();
 
   timerInterval = setInterval(() => {
     if (!gameOver && !gameWon) {
