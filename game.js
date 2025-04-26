@@ -512,9 +512,10 @@ function drawEndScreen() {
 
   const button = document.createElement("button");
   button.textContent = "Play Again";
-  button.style.position = "absolute";
-  button.style.left = `${canvas.width / 2 - 60}px`;
-  button.style.top = `${canvas.height / 2 + 20}px`;
+  button.style.position = "fixed";
+  button.style.left = "50svw";
+  button.style.top = "30svh";
+  button.style.transform = "translate(-50%, -50%)";
   button.style.fontSize = "18px";
   button.style.padding = "10px 20px";
   document.body.appendChild(button);
@@ -525,9 +526,10 @@ function drawEndScreen() {
   };
   const clearBtn = document.createElement("button");
   clearBtn.textContent = "Clear Scoreboard";
-  clearBtn.style.position = "absolute";
-  clearBtn.style.left = `${canvas.width / 2 - 80}px`;
-  clearBtn.style.top = `${canvas.height / 2 + 70}px`;
+  clearBtn.style.position = "fixed";
+  clearBtn.style.left = "50svw";
+  clearBtn.style.top = "40svh";
+  clearBtn.style.transform = "translate(-50%, -50%)";
   clearBtn.style.fontSize = "16px";
   clearBtn.style.padding = "8px 16px";
   document.body.appendChild(clearBtn);
