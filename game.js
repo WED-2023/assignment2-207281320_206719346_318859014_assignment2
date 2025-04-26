@@ -1,7 +1,7 @@
 import { CONFIG as DEFAULT_CONFIG } from "./constants.js";
 // --- Canvas Setup ---
 const storedConfig =
-JSON.parse(localStorage.getItem("gameConfig")) || DEFAULT_CONFIG;
+  JSON.parse(localStorage.getItem("gameConfig")) || DEFAULT_CONFIG;
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -26,10 +26,10 @@ newGameBtn.type = "button";
 
 // --- Config ---
 const config = {
-    shootKey: storedConfig.shootKey,
-    gameTimeSeconds: storedConfig.gameTime,
-  };
-  
+  shootKey: storedConfig.shootKey,
+  gameTimeSeconds: storedConfig.gameTime,
+};
+
 // --- Sounds ---
 const backgroundMusic = new Audio("sounds/bg_music.mp3");
 backgroundMusic.loop = true;
@@ -64,27 +64,27 @@ function saveScoreToHistory() {
   return history;
 }
 function drawScoreboard(history) {
-    if (!history || history.length === 0) return;
-    const rank = history.findIndex((h) => h.score === score) + 1;
-    ctx.font = "24px Arial";
-    ctx.fillStyle = "white";
+  if (!history || history.length === 0) return;
+  const rank = history.findIndex((h) => h.score === score) + 1;
+  ctx.font = "24px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(
+    `Your Rank: #${rank} of ${history.length}`,
+    canvas.width / 2,
+    canvas.height / 2 + 60
+  );
+  ctx.font = "18px Arial";
+  ctx.fillText("Top 5 Scores:", canvas.width / 2, canvas.height / 2 + 90);
+  history.slice(0, 5).forEach((entry, i) => {
     ctx.fillText(
-      `Your Rank: #${rank} of ${history.length}`,
+      `${i + 1}. ${entry.player} – ${entry.score} pts – ${entry.date}`,
       canvas.width / 2,
-      canvas.height / 2 + 60
+      canvas.height / 2 + 120 + i * 25
     );
-    ctx.font = "18px Arial";
-    ctx.fillText("Top 5 Scores:", canvas.width / 2, canvas.height / 2 + 90);
-    history.slice(0, 5).forEach((entry, i) => {
-      ctx.fillText(
-        `${i + 1}. ${entry.player} – ${entry.score} pts – ${entry.date}`,
-        canvas.width / 2,
-        canvas.height / 2 + 120 + i * 25
-      );
-    });
-  }
+  });
+}
 
-  // --- Images ---
+// --- Images ---
 
 const color = storedConfig.spaceshipColor || "purple";
 
@@ -124,7 +124,6 @@ const enemyImages = [
   return img;
 });
 
-
 // --- Variables ---
 let score = 0;
 let lives = 3;
@@ -150,7 +149,6 @@ const ship = {
   dx: 0,
   dy: 0,
 };
-
 
 // --- Controls ---
 let controlsInitialized = false;
@@ -272,7 +270,6 @@ function updatePlayerBullets() {
   }
 }
 
-
 function drawPlayerBullets() {
   playerBullets.forEach((bullet) => {
     ctx.drawImage(
@@ -284,7 +281,6 @@ function drawPlayerBullets() {
     );
   });
 }
-
 
 // --- Enemies ---
 const enemies = [];
@@ -299,7 +295,6 @@ const enemyGroup = {
   dx: 1, // just direction: 1 or -1
   width: cols * (enemyWidth + spacing),
 };
-
 
 function createEnemies() {
   enemies.length = 0; // clear old ones
@@ -319,7 +314,6 @@ function createEnemies() {
   enemyGroup.dx = BASE_ENEMY_SPEED;
 }
 
-
 function updateEnemies() {
   //// enemyGroup.x += enemyGroup.dx;
   // enemyGroup.x += currentEnemySpeed;
@@ -328,18 +322,14 @@ function updateEnemies() {
   // }
   enemyGroup.x += currentEnemySpeed * enemyGroup.dx;
 
-if (
-  enemyGroup.x <= 0 ||
-  enemyGroup.x + enemyGroup.width >= canvas.width
-) {
-  enemyGroup.dx *= -1; // Flip direction
-}
+  if (enemyGroup.x <= 0 || enemyGroup.x + enemyGroup.width >= canvas.width) {
+    enemyGroup.dx *= -1; // Flip direction
+  }
   // Check if all enemies are dead - if so, game won
   if (!gameWon && enemies.every((e) => !e.alive)) {
     gameWon = true;
   }
 }
-
 
 function drawEnemies() {
   enemies.forEach((enemy) => {
@@ -365,7 +355,7 @@ function fireEnemyMissile() {
   enemyMissiles.push({
     x: enemyGroup.x + shooter.x + enemyWidth / 2 - 5,
     y: enemyGroup.y + shooter.y + enemyHeight,
-    speed: currentMissileSpeed, 
+    speed: currentMissileSpeed,
     width: 10,
     height: 20,
   });
@@ -570,7 +560,6 @@ function drawEndScreen() {
   };
 }
 
-
 // --- Game Loop ---
 let gameLoopId;
 
@@ -618,13 +607,11 @@ function startGame() {
   scheduleSpeedBoosts();
 }
 
-
 shipImg.onload = () => {
   setupControls();
   createEnemies();
   startGame();
 };
-
 
 function resetGame() {
   // Stop existing loop and timer
@@ -633,7 +620,6 @@ function resetGame() {
   clearInterval(speedBoostTimer);
   currentEnemySpeed = BASE_ENEMY_SPEED;
   currentMissileSpeed = BASE_MISSILE_SPEED;
-
 
   // Reset state
   score = 0;
@@ -659,7 +645,10 @@ function resetGame() {
 
   // Clear buttons
   document.querySelectorAll("button").forEach((btn) => {
-    if (btn.textContent === "Play Again" || btn.textContent === "Clear Scoreboard") {
+    if (
+      btn.textContent === "Play Again" ||
+      btn.textContent === "Clear Scoreboard"
+    ) {
       btn.remove();
     }
   });
@@ -667,9 +656,6 @@ function resetGame() {
   // Restart game loop
   startGame();
 }
-
-
-
 
 function scheduleSpeedBoosts() {
   currentEnemySpeed = BASE_ENEMY_SPEED;

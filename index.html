@@ -11,7 +11,7 @@
     <header class="flex-centered">
       <img src="images/logoT.webp" style="height: 40px" />
       <div id="menu">
-        <a href="#" id="nav-home" class="color-hover">HOMEPAGE</a>
+        <a href="index.html" id="nav-home" class="color-hover">HOMEPAGE</a>
         <a href="#" id="nav-about" class="color-hover">ABOUT</a>
       </div>
     </header>
@@ -27,9 +27,9 @@
     <main class="flex-centered"></main>
 
     <footer class="flex-centered">
-      <div style="text-align: center; color: var(--color-one); font-size: 14px;">
+      <div style="width: 90%; display: flex; justify-content: space-between">
         <p>Void Wars &copy; 2025. All rights reserved.</p>
-        <p>Contact: lyubansd@post.bgu.ac.il</p>
+        <p>Contact: lyubansd@post.bgu.ac.il | mordanet@post.bgu.ac.il |</p>
       </div>
     </footer>
 
@@ -50,12 +50,6 @@
         logoutButton.textContent = "LOGOUT";
         logoutButton.className = "color-hover";
 
-        const configButton = document.createElement("a");
-        configButton.href = "#";
-        configButton.textContent = "CONFIG";
-        configButton.className = "color-hover";
-        configButton.id = "config-btn";
-
         logoutButton.addEventListener("click", () => {
           localStorage.removeItem("loggedUser");
           alert(`We hope to see you again soon, ${user}`);
@@ -63,7 +57,6 @@
         });
 
         // Append to menu
-        menu.appendChild(configButton);
         menu.appendChild(logoutButton);
       }
 
