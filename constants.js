@@ -1,8 +1,5 @@
 // Deafult users
-export const USERS = [
-  { username: "p", password: "testuser" },
-  { username: "123", password: "123" },
-];
+export const USERS = [{ username: "p", password: "testuser" }];
 
 // Dates for registration
 export const YEARS = Array.from({ length: 100 }, (_, i) => 2024 - i);
@@ -13,7 +10,7 @@ export function getDaysInMonth(year, month) {
 
 // Deafault config
 export const CONFIG = {
-  shootKey: "space",
+  shootKey: "",
   gameTime: 120,
   spaceshipColor: "blue",
 };
