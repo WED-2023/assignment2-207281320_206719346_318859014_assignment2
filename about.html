@@ -9,4 +9,8 @@
   <p style="text-align: center;">Use the arrow keys to move your ship and your firing key to shoot. You have 3 lives. Eliminate all enemies before time runs out or you lose all lives.</p>
   <p style="text-align: center;">Each enemy row gives a different score: top row 20 points, then 15, 10, and 5 for the bottom row.</p>
   <p style="text-align: center;">⚠️ Enemies move faster every 5 seconds for the first 20 seconds — stay sharp!</p>
+  <p><strong>Challanges:</strong></p>
+  <p style="text-align: center;">While developing the game, we encountered an issue where multiple event listeners were being attached accidentally whenever a new game was created inside an active game session. As a result, the enemy ships moved faster and faster each time, because the movement and action listeners were stacking up with every new game. </p>
+  <p style="text-align: center;">The problem happened because event listeners were added globally without being properly managed. Each time a new game was created inside the session, new listeners were added on top of the existing ones.</p>
+  <p style="text-align: center;">To solve this, we made sure to remove the old event listeners before adding new ones. This way, we ensured that only one set of listeners was active at any given time, preventing the stacking issue and keeping the game running smoothly.</p>
 </div>
