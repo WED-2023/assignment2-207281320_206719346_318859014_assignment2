@@ -1,4 +1,7 @@
+import { CONFIG as DEFAULT_CONFIG } from "./constants.js";
 // --- Canvas Setup ---
+const storedConfig =
+  JSON.parse(localStorage.getItem("gameConfig")) || DEFAULT_CONFIG;
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -9,7 +12,7 @@ const gameHeight = canvas.height;
 const newGameBtn = document.createElement("button");
 newGameBtn.textContent = "New Game";
 newGameBtn.style.position = "absolute";
-newGameBtn.style.top = "10px";
+newGameBtn.style.top = "60px";
 newGameBtn.style.right = "20px";
 newGameBtn.style.zIndex = "1000";
 newGameBtn.style.fontSize = "16px";
@@ -17,14 +20,32 @@ newGameBtn.style.padding = "8px 12px";
 document.body.appendChild(newGameBtn);
 newGameBtn.onclick = () => {
   // Don't save score — reload
-  location.reload();
+  resetGame();
 };
+newGameBtn.type = "button";
 
 // --- Config ---
 const config = {
-  shootKey: " ", // default: spacebar
-  gameTimeSeconds: 120, // 2 minutes default
+  shootKey: storedConfig.shootKey,
+  gameTimeSeconds: storedConfig.gameTime,
 };
+
+// --- Sounds ---
+const backgroundMusic = new Audio("sounds/bg_music.mp3");
+backgroundMusic.loop = true;
+backgroundMusic.volume = 1;
+function playEnemyHitSound() {
+  const sound = new Audio("sounds/enemy_hit.mp3");
+  sound.volume = 1;
+  sound.play();
+}
+
+const playerExplodesSound = new Audio("sounds/player_explodes.mp3");
+playerExplodesSound.loop = false;
+playerExplodesSound.volume = 1;
+const loseSound = new Audio("sounds/you_lose.mp3");
+loseSound.loop = false;
+loseSound.volume = 1;
 
 // --- Scoreboard ---
 const currentPlayer = localStorage.getItem("loggedUser");
@@ -42,7 +63,6 @@ function saveScoreToHistory() {
   localStorage.setItem(scoreKey, JSON.stringify(history));
   return history;
 }
-
 function drawScoreboard(history) {
   if (!history || history.length === 0) return;
   const rank = history.findIndex((h) => h.score === score) + 1;
@@ -65,8 +85,24 @@ function drawScoreboard(history) {
 }
 
 // --- Images ---
+
+const color = storedConfig.spaceshipColor || "purple";
+
 const shipImg = new Image();
-shipImg.src = "images/spaceship.png";
+switch (color) {
+  case "red":
+    shipImg.src = "images/PlayerShipRed.png";
+    break;
+  case "blue":
+    shipImg.src = "images/PlayerShipBlue.png";
+    break;
+  case "green":
+    shipImg.src = "images/PlayerShipGreen.png";
+    break;
+  default:
+    shipImg.src = "images/spaceship.png"; // purple/default
+    break;
+}
 
 const enemyMissileImg = new Image();
 enemyMissileImg.src = "images/enemy_missile.png";
@@ -87,6 +123,7 @@ const enemyImages = [
   img.src = src;
   return img;
 });
+
 // --- Variables ---
 let score = 0;
 let lives = 3;
@@ -96,8 +133,11 @@ let speedBoosts = 0;
 const maxSpeedBoosts = 4;
 const speedBoostInterval = 5000; // 5 seconds
 let timeLeft = config.gameTimeSeconds;
-let timerInterval = null;
-
+const BASE_ENEMY_SPEED = 2;
+const BASE_MISSILE_SPEED = 2;
+let currentEnemySpeed = BASE_ENEMY_SPEED;
+let currentMissileSpeed = BASE_MISSILE_SPEED;
+let speedBoostTimer = null;
 // --- Ship ---
 const movementAreaHeight = gameHeight * 0.4;
 const ship = {
@@ -111,30 +151,37 @@ const ship = {
 };
 
 // --- Controls ---
-document.addEventListener("keydown", (e) => {
-  switch (e.key) {
-    case "ArrowLeft":
-      ship.dx = -ship.speed;
-      break;
-    case "ArrowRight":
-      ship.dx = ship.speed;
-      break;
-    case "ArrowUp":
-      ship.dy = -ship.speed;
-      break;
-    case "ArrowDown":
-      ship.dy = ship.speed;
-      break;
-  }
-  if (e.key === config.shootKey) {
-    firePlayerBullet();
-  }
-});
+let controlsInitialized = false;
 
-document.addEventListener("keyup", (e) => {
-  if (["ArrowLeft", "ArrowRight"].includes(e.key)) ship.dx = 0;
-  if (["ArrowUp", "ArrowDown"].includes(e.key)) ship.dy = 0;
-});
+function setupControls() {
+  if (controlsInitialized) return;
+  controlsInitialized = true;
+
+  document.addEventListener("keydown", (e) => {
+    switch (e.key) {
+      case "ArrowLeft":
+        ship.dx = -ship.speed;
+        break;
+      case "ArrowRight":
+        ship.dx = ship.speed;
+        break;
+      case "ArrowUp":
+        ship.dy = -ship.speed;
+        break;
+      case "ArrowDown":
+        ship.dy = ship.speed;
+        break;
+    }
+    if (e.key === config.shootKey) {
+      firePlayerBullet();
+    }
+  });
+
+  document.addEventListener("keyup", (e) => {
+    if (["ArrowLeft", "ArrowRight"].includes(e.key)) ship.dx = 0;
+    if (["ArrowUp", "ArrowDown"].includes(e.key)) ship.dy = 0;
+  });
+}
 
 function updatePosition() {
   const newX = ship.x + ship.dx;
@@ -186,6 +233,7 @@ function updatePlayerBullets() {
         bullet.y < enemyY + enemyHeight &&
         bullet.y + bullet.height > enemyY
       ) {
+        playEnemyHitSound();
         explosions.push({
           x: enemyGroup.x + enemy.x + enemyWidth / 2 - 16,
           y: enemyGroup.y + enemy.y + enemyHeight / 2 - 16,
@@ -241,29 +289,41 @@ const cols = 5;
 const enemyWidth = 45;
 const enemyHeight = 45;
 const spacing = 24;
-
 const enemyGroup = {
   x: 50,
   y: 50,
-  dx: 2,
+  dx: 1, // just direction: 1 or -1
   width: cols * (enemyWidth + spacing),
 };
 
-for (let row = 0; row < rows; row++) {
-  for (let col = 0; col < cols; col++) {
-    enemies.push({
-      x: col * (enemyWidth + spacing),
-      y: row * (enemyHeight + spacing),
-      rowIndex: row,
-      alive: true,
-    });
+function createEnemies() {
+  enemies.length = 0; // clear old ones
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      enemies.push({
+        x: col * (enemyWidth + spacing),
+        y: row * (enemyHeight + spacing),
+        rowIndex: row,
+        alive: true,
+      });
+    }
   }
+
+  enemyGroup.x = 50;
+  enemyGroup.dx = BASE_ENEMY_SPEED;
 }
 
 function updateEnemies() {
-  enemyGroup.x += enemyGroup.dx;
+  //// enemyGroup.x += enemyGroup.dx;
+  // enemyGroup.x += currentEnemySpeed;
+  // if (enemyGroup.x <= 0 || enemyGroup.x + enemyGroup.width >= canvas.width) {
+  //   enemyGroup.dx *= -1;
+  // }
+  enemyGroup.x += currentEnemySpeed * enemyGroup.dx;
+
   if (enemyGroup.x <= 0 || enemyGroup.x + enemyGroup.width >= canvas.width) {
-    enemyGroup.dx *= -1;
+    enemyGroup.dx *= -1; // Flip direction
   }
   // Check if all enemies are dead - if so, game won
   if (!gameWon && enemies.every((e) => !e.alive)) {
@@ -285,8 +345,6 @@ function drawEnemies() {
     }
   });
 }
-
-// --- Enemy Missiles ---
 let enemyMissiles = [];
 let missileTriggeredNext = false;
 
@@ -297,7 +355,7 @@ function fireEnemyMissile() {
   enemyMissiles.push({
     x: enemyGroup.x + shooter.x + enemyWidth / 2 - 5,
     y: enemyGroup.y + shooter.y + enemyHeight,
-    speed: 2 * Math.pow(1.2, speedBoosts),
+    speed: currentMissileSpeed,
     width: 10,
     height: 20,
   });
@@ -331,6 +389,8 @@ function updateEnemyMissiles() {
       missile.y < ship.y + ship.height &&
       missile.y + missile.height > ship.y
     ) {
+      playerExplodesSound.currentTime = 0;
+      playerExplodesSound.play();
       explosions.push({
         x: ship.x + ship.width / 2 - 16,
         y: ship.y + ship.height / 2 - 16,
@@ -340,16 +400,19 @@ function updateEnemyMissiles() {
       });
       enemyMissiles.splice(i, 1);
       i--;
-      //   ship.x = Math.random() * (gameWidth - ship.width);
-      //   ship.y = gameHeight - ship.height - 20;
       lives--;
       if (lives <= 0) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+        setTimeout(() => {
+          loseSound.currentTime = 0;
+          loseSound.play();
+        }, 500);
         gameOver = true;
       } else {
         ship.x = Math.random() * (gameWidth - ship.width);
         ship.y = gameHeight - ship.height - 20;
       }
-      //   continue;
     }
 
     if (missile.y > canvas.height) {
@@ -414,6 +477,7 @@ function drawHUD() {
   // Score
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
+  ctx.textAlign = "left";
   ctx.fillText(`Score: ${score}`, 20, 30);
 
   // Lives
@@ -448,21 +512,24 @@ function drawEndScreen() {
 
   const button = document.createElement("button");
   button.textContent = "Play Again";
-  button.style.position = "absolute";
-  button.style.left = `${canvas.width / 2 - 60}px`;
-  button.style.top = `${canvas.height / 2 + 20}px`;
+  button.style.position = "fixed";
+  button.style.left = "50svw";
+  button.style.top = "30svh";
+  button.style.transform = "translate(-50%, -50%)";
   button.style.fontSize = "18px";
   button.style.padding = "10px 20px";
   document.body.appendChild(button);
-
+  button.type = "button";
   button.onclick = () => {
-    location.reload();
+    //location.reload();
+    resetGame();
   };
   const clearBtn = document.createElement("button");
   clearBtn.textContent = "Clear Scoreboard";
-  clearBtn.style.position = "absolute";
-  clearBtn.style.left = `${canvas.width / 2 - 80}px`;
-  clearBtn.style.top = `${canvas.height / 2 + 70}px`;
+  clearBtn.style.position = "fixed";
+  clearBtn.style.left = "50svw";
+  clearBtn.style.top = "40svh";
+  clearBtn.style.transform = "translate(-50%, -50%)";
   clearBtn.style.fontSize = "16px";
   clearBtn.style.padding = "8px 16px";
   document.body.appendChild(clearBtn);
@@ -496,6 +563,8 @@ function drawEndScreen() {
 }
 
 // --- Game Loop ---
+let gameLoopId;
+
 function gameLoop() {
   updatePosition();
   updateEnemies();
@@ -510,20 +579,24 @@ function gameLoop() {
   drawEnemyMissiles();
   drawPlayerBullets();
   drawExplosions();
-  //   drawScore();
-  //   drawLives();
   drawHUD();
 
   if (gameOver || gameWon) {
     drawEndScreen();
     return;
   }
-  requestAnimationFrame(gameLoop);
+
+  gameLoopId = requestAnimationFrame(gameLoop);
 }
 
-shipImg.onload = () => {
-  gameLoop();
+let timerInterval = null;
 
+function startGame() {
+  gameLoop();
+  backgroundMusic.currentTime = 0;
+  backgroundMusic.play();
+
+  clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     if (!gameOver && !gameWon) {
       timeLeft--;
@@ -533,16 +606,73 @@ shipImg.onload = () => {
       }
     }
   }, 1000);
+  scheduleSpeedBoosts();
+}
+
+shipImg.onload = () => {
+  setupControls();
+  createEnemies();
+  startGame();
 };
 
-setInterval(() => {
-  if (speedBoosts < maxSpeedBoosts) {
-    enemyGroup.dx *= 1.2; // Speed up enemy group movement
+function resetGame() {
+  // Stop existing loop and timer
+  cancelAnimationFrame(gameLoopId);
+  clearInterval(timerInterval);
+  clearInterval(speedBoostTimer);
+  currentEnemySpeed = BASE_ENEMY_SPEED;
+  currentMissileSpeed = BASE_MISSILE_SPEED;
 
-    enemyMissiles.forEach((missile) => {
-      missile.speed *= 1.2; // Speed up current missiles
-    });
+  // Reset state
+  score = 0;
+  lives = 3;
+  gameOver = false;
+  gameWon = false;
+  speedBoosts = 0;
+  timeLeft = config.gameTimeSeconds;
 
-    speedBoosts++;
-  }
-}, speedBoostInterval);
+  ship.x = Math.random() * (gameWidth - ship.width);
+  ship.y = gameHeight - ship.height - 20;
+  ship.dx = 0;
+  ship.dy = 0;
+
+  playerBullets = [];
+  enemyMissiles = [];
+  explosions = [];
+
+  createEnemies();
+
+  backgroundMusic.currentTime = 0;
+  backgroundMusic.play();
+
+  // Clear buttons
+  document.querySelectorAll("button").forEach((btn) => {
+    if (
+      btn.textContent === "Play Again" ||
+      btn.textContent === "Clear Scoreboard"
+    ) {
+      btn.remove();
+    }
+  });
+
+  // Restart game loop
+  startGame();
+}
+
+function scheduleSpeedBoosts() {
+  currentEnemySpeed = BASE_ENEMY_SPEED;
+  currentMissileSpeed = BASE_MISSILE_SPEED;
+
+  let boosts = 0;
+  const boostAmount = 0.3; // subtle increase
+
+  speedBoostTimer = setInterval(() => {
+    boosts++;
+    if (boosts > 4) {
+      clearInterval(speedBoostTimer);
+      return;
+    }
+    currentEnemySpeed += boostAmount;
+    currentMissileSpeed += boostAmount;
+  }, 5000); // every 5 seconds
+}

@@ -24,9 +24,6 @@ export function loadPage(url) {
 document
   .getElementById("nav-home")
   .addEventListener("click", () => loadPage("welcome.html"));
-document
-  .getElementById("nav-how")
-  .addEventListener("click", () => loadPage("howtoplay.html"));
 
 window.addEventListener("DOMContentLoaded", () => {
   loadPage("welcome.html");

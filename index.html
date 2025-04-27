@@ -11,9 +11,8 @@
     <header class="flex-centered">
       <img src="images/logoT.webp" style="height: 40px" />
       <div id="menu">
-        <a href="#" id="nav-home" class="color-hover">HOMEPAGE</a>
+        <a href="index.html" id="nav-home" class="color-hover">HOMEPAGE</a>
         <a href="#" id="nav-about" class="color-hover">ABOUT</a>
-        <a href="#" id="nav-how" class="color-hover">HOW TO PLAY</a>
       </div>
     </header>
 
@@ -28,9 +27,9 @@
     <main class="flex-centered"></main>
 
     <footer class="flex-centered">
-      <div style="text-align: center; color: var(--color-one); font-size: 14px;">
+      <div style="width: 90%; display: flex; justify-content: space-between">
         <p>Void Wars &copy; 2025. All rights reserved.</p>
-        <p>Contact: lyubansd@post.bgu.ac.il</p>
+        <p>Contact: lyubansd@post.bgu.ac.il | mordanet@post.bgu.ac.il |</p>
       </div>
     </footer>
 
@@ -45,6 +44,7 @@
 
       // Create button and logic for user
       if (user) {
+        // Logout button
         const logoutButton = document.createElement("a");
         logoutButton.href = "#";
         logoutButton.textContent = "LOGOUT";

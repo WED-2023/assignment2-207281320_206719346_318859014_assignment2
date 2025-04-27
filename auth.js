@@ -86,7 +86,7 @@ export function setup() {
       alert(`Welcome back, ${username}!`);
       localStorage.setItem("loggedUser", username);
       //location.reload(); // Reload to load the script again, allows for the index.html's logout button to appear
-      loadPage("game.html"); // Than load main's div with config
+      loadPage("config.html"); // Than load main's div with config
     });
   }
 
