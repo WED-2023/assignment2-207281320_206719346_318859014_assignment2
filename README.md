@@ -4,7 +4,7 @@
 - 207281320
 - 318859014
 
-http://127.0.0.1:5500/assignment2-207281320_206719346_assignment2/index.html
+https://wed-2023.github.io/assignment2-207281320_206719346_318859014_assignment2/
 
 ## How to Play Void Wars:
 
