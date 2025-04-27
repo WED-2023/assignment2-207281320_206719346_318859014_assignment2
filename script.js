@@ -38,10 +38,6 @@ function attachPageEvents() {
   if (loginBtn) {
     loginBtn.addEventListener("click", () => loadPage("login.html"));
   }
-  const configBtn = document.getElementById("config-btn");
-  if (configBtn) {
-    configBtn.addEventListener("click", () => loadPage("config.html"));
-  }
 }
 
 /* Sound effects */
