@@ -1,16 +1,59 @@
-<div class="flex-centered flex-column">
+<div class="flex-column">
   <img
     src="images/logoT.webp"
     class="floatingDiv"
-    style="margin-bottom: 20px"
+    style="margin-bottom: 20px; text-align: center"
   />
   <p><strong>How to Play Void Wars:</strong></p>
-  <p style="text-align: center;">Login and go to the Configuration screen. Choose a time duration (minimum 2 minutes) and set your firing key — we recommend using the Spacebar.</p>
-  <p style="text-align: center;">Use the arrow keys to move your ship and your firing key to shoot. You have 3 lives. Eliminate all enemies before time runs out or you lose all lives.</p>
-  <p style="text-align: center;">Each enemy row gives a different score: top row 20 points, then 15, 10, and 5 for the bottom row.</p>
-  <p style="text-align: center;">⚠️ Enemies move faster every 5 seconds for the first 20 seconds — stay sharp!</p>
+  <p>
+    Login and go to the Configuration screen. Choose a time duration (minimum 2
+    minutes) and set your firing key — we recommend using the Spacebar.
+  </p>
+  <p>
+    Use the arrow keys to move your ship and your firing key to shoot. You have
+    3 lives. Eliminate all enemies before time runs out or you lose all lives.
+  </p>
+  <p>
+    Each enemy row gives a different score: top row 20 points, then 15, 10, and
+    5 for the bottom row.
+  </p>
+  <p>
+    ⚠️ Enemies move faster every 5 seconds for the first 20 seconds — stay
+    sharp!
+  </p>
   <p><strong>Challanges:</strong></p>
-  <p style="text-align: center;">While developing the game, we encountered an issue where multiple event listeners were being attached accidentally whenever a new game was created inside an active game session. As a result, the enemy ships moved faster and faster each time, because the movement and action listeners were stacking up with every new game. </p>
-  <p style="text-align: center;">The problem happened because event listeners were added globally without being properly managed. Each time a new game was created inside the session, new listeners were added on top of the existing ones.</p>
-  <p style="text-align: center;">To solve this, we made sure to remove the old event listeners before adding new ones. This way, we ensured that only one set of listeners was active at any given time, preventing the stacking issue and keeping the game running smoothly.</p>
+  <p>1 -</p>
+  <p>
+    While developing the game, we encountered an issue where multiple event
+    listeners were being attached accidentally whenever a new game was created
+    inside an active game session. As a result, the enemy ships moved faster and
+    faster each time, because the movement and action listeners were stacking up
+    with every new game.
+  </p>
+  <p>
+    The problem happened because event listeners were added globally without
+    being properly managed. Each time a new game was created inside the session,
+    new listeners were added on top of the existing ones.
+  </p>
+  <p>
+    To solve this, we made sure to remove the old event listeners before adding
+    new ones. This way, we ensured that only one set of listeners was active at
+    any given time, preventing the stacking issue and keeping the game running
+    smoothly.
+  </p>
+  <p>2 -</p>
+  <p>
+    We've wanted to create the website as an SPA - single page application, but
+    also keep seperation of concerns, therefor working with seperate html and js
+    files. Because we've created it as an SPA, we've encountered issued were the
+    DOM would't not load correctly with loading a different html file into the
+    main content area, or made it hard to end certain scripts (example: going
+    back from game to main).
+  </p>
+  <p>
+    The solution we found was to enforce the loadPage function to also run a
+    setup function for certain scripts, enforcing them to load the relevant
+    pieces of code we needed them to initially run when being loaded into the
+    main content area.
+  </p>
 </div>

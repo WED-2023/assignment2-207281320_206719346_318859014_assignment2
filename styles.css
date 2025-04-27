@@ -164,15 +164,14 @@ button:hover {
 
 .modal-content {
   background-color: var(--color-four);
-  margin: 20svh auto;
+  margin: 15svh auto;
   padding: 20px;
   border: 10px solid var(--color-two);
   width: 60svw; /* For some reason without this closing the modal from outside click won't work (?) */
   box-shadow: 10px 10px var(--color-one);
-  max-width: 600px; 
   box-sizing: border-box;
   overflow-y: auto;
-  max-height: 80vh; 
+  max-height: 80vh;
   font-size: 16px;
 }
 
@@ -190,5 +189,3 @@ button:hover {
   text-decoration: none;
   cursor: pointer;
 }
-
-
